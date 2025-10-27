@@ -1,0 +1,4 @@
+fastapi==0.115.5
+uvicorn[standard]==0.32.0
+mysql-connector-python==9.0.0
+passlib==1.7.4

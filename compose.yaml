@@ -1,0 +1,76 @@
+services:
+  db:
+    # We use a mariadb image which supports both amd64 & arm64 architecture
+    image: mariadb:10-focal
+    # If you really want to use MySQL, uncomment the following line
+    #image: mysql:8
+    command: '--default-authentication-plugin=mysql_native_password'
+    restart: always
+    healthcheck:
+      test: ['CMD-SHELL', 'mysqladmin ping -h 127.0.0.1 --password="$$(cat /run/secrets/db-password)" --silent']
+      interval: 3s
+      retries: 5
+      start_period: 30s
+    secrets:
+      - db-password
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - backnet
+    environment:
+      - MYSQL_DATABASE=example
+      - MYSQL_ROOT_PASSWORD_FILE=/run/secrets/db-password
+    expose:
+      - 3306
+      - 33060
+
+  backend:
+    build:
+      context: backend
+      # if your Dockerfile has a "builder" target keep it, else remove the next line
+      target: builder
+    restart: always
+    secrets:
+      - db-password
+    # Host port mapping is optional if you only access via the proxy.
+    # Uncomment if you want to hit FastAPI directly for debugging:
+    # ports:
+    #   - 8000:8000
+    expose:
+      - 8000
+    networks:
+      - backnet
+      - frontnet
+    depends_on:
+      db:
+        condition: service_healthy
+  frontend:
+    build:
+      context: frontend
+    restart: always
+    ports:
+      - 8080:80
+    networks:
+      - frontnet
+    depends_on:
+      - proxy   # optional: ensures backend is up first
+  proxy:
+    build: proxy
+    restart: always
+    ports:
+      - 80:80
+    depends_on: 
+      - backend
+    networks:
+      - frontnet
+
+volumes:
+  db-data:
+
+secrets:
+  db-password:
+    file: db/password.txt
+
+networks:
+  backnet:
+  frontnet:

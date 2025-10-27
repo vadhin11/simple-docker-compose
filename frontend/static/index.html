@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Auth Demo (HTML + FastAPI + MariaDB)</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="container">
+    <h1>Register Login Fetch user Demo</h1>
+
+    <section class="card">
+      <h2>Register</h2>
+      <form id="registerForm">
+        <label>Username <input name="username" minlength="3" maxlength="100" required></label>
+        <label>Password <input name="password" type="password" minlength="6" maxlength="128" required></label>
+        <button type="submit">Create account</button>
+      </form>
+      <pre id="registerResult" class="result"></pre>
+    </section>
+
+    <section class="card">
+      <h2>Login</h2>
+      <form id="loginForm">
+        <label>Username <input name="username" required></label>
+        <label>Password <input name="password" type="password" required></label>
+        <button type="submit">Login</button>
+      </form>
+      <div class="row">
+        <button id="logoutBtn" class="secondary">Logout</button>
+        <span id="sessionInfo"></span>
+      </div>
+      <pre id="loginResult" class="result"></pre>
+    </section>
+
+    <section class="card">
+      <h2>Users</h2>
+      <div class="row">
+        <button id="refreshUsersBtn">Refresh</button>
+      </div>
+      <table id="usersTable">
+        <thead><tr><th>ID</th><th>Username</th><th>Created At</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </section>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

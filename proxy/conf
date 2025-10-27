@@ -1,0 +1,22 @@
+upstream web  { server frontend:80; }   # frontend container
+upstream api  { server backend:8000; }  # fastapi container
+
+server {
+  listen 80;
+  server_name _;
+
+  location /api/ {
+    proxy_pass http://api/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_http_version 1.1;
+    proxy_set_header Connection "";
+  }
+
+  # All other paths → frontend app
+  location / {
+    proxy_pass http://web/;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+  }
+}
