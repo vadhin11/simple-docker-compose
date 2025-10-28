@@ -139,11 +139,11 @@ db-1  | 2025-10-27 17:14:31+00:00 [Note] [Entrypoint]: MariaDB upgrade not requi
 Listing containers should show three containers running and the port mapping as below:
 ```
 $ docker ps
-IMAGE                          COMMAND                  CREATED          STATUS                    PORTS                                         NAMES
-nginx-fast-mysql-v2-frontend   "/docker-entrypoint.…"   26 minutes ago   Up 26 minutes             0.0.0.0:8080->80/tcp, [::]:8080->80/tcp       nginx-fast-mysql-v2-frontend-1
-nginx-fast-mysql-v2-proxy      "nginx -g 'daemon of…"   26 minutes ago   Up 26 minutes             0.0.0.0:80->80/tcp, [::]:80->80/tcp           nginx-fast-mysql-v2-proxy-1
-nginx-fast-mysql-v2-backend    "uvicorn app.main:ap…"   26 minutes ago   Up 26 minutes             0.0.0.0:8000->8000/tcp, [::]:8000->8000/tcp   nginx-fast-mysql-v2-backend-1
-mariadb:10-focal               "docker-entrypoint.s…"   26 minutes ago   Up 26 minutes (healthy)   3306/tcp, 33060/tcp                           nginx-fast-mysql-v2-db-1
+NAME                               IMAGE                            COMMAND                  SERVICE    CREATED             STATUS                       PORTS
+simple-docker-compose-backend-1    simple-docker-compose-backend    "uvicorn app.main:ap…"   backend    About an hour ago   Up About an hour             8000/tcp
+simple-docker-compose-db-1         mariadb:10-focal                 "docker-entrypoint.s…"   db         About an hour ago   Up About an hour (healthy)   3306/tcp, 33060/tcp
+simple-docker-compose-frontend-1   simple-docker-compose-frontend   "/docker-entrypoint.…"   frontend   About an hour ago   Up About an hour             0.0.0.0:8080->80/tcp, [::]:8080->80/tcp
+simple-docker-compose-proxy-1      simple-docker-compose-proxy      "nginx -g 'daemon of…"   proxy      About an hour ago   Up About an hour             0.0.0.0:80->80/tcp, [::]:80->80/tcp
 ```
 
 After the application starts, navigate to `http://localhost:80` or `http://localhost` or `http://<IP>`  in your web browser or run:
